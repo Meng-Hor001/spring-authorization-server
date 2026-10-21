@@ -30,7 +30,7 @@ public class SecurityConfig {
     @Bean
     AuthorizationServerSettings authorizationServerSettings(Environment environment){
         return AuthorizationServerSettings.builder()
-                .issuer(environment.getRequiredProperty("app.issuer"))
+                .issuer(environment.getRequiredProperty("spring.security.oauth2.authorizationserver.issuer"))
                 .build();
     }
 }
