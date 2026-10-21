@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: spring_authorization_server
+
+app:
+  issuer: ${AUTH_ISSUER}
+  login-redirect-uri: ${LOGIN_REDIRECT_URI}
+  service-secret: ${SERVICE_CLIENT_SECRET}
+  login-secret: ${LOGIN_CLIENT_SECRET}
+  user-password: ${DEMO_USER_PASSWORD}
+
+
+server:
+  port: 9090
