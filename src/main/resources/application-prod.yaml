@@ -1,0 +1,16 @@
+server:
+  ssl:
+    enabled: true
+    key-store: ${TLS_KEY_STORE}
+    key-store-type: PKCS12
+    key-store-password: ${TLS_KEY_STORE_PASSWORD}
+    key-alias: ${TLS_KEY_ALIAS:auth-server-tls}
+spring:
+  security:
+    oauth2:
+      authorizationserver:
+        issuer: ${AUTH_ISSUER}
+app:
+  signing-key:
+    path: ${SIGNING_KEY_PATH}
+    password: ${SIGNING_KEY_PASSWORD}

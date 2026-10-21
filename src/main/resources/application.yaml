@@ -1,14 +1,35 @@
 spring:
+  profiles:
+    default: dev
   application:
     name: spring_authorization_server
-
-
+  datasource:
+    url: jdbc:postgresql://localhost:5432/authorization_server_db?currentSchema=authorization_server
+    username: postgres
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: authorization_server
+  flyway:
+    enabled: true
+    default-schema: authorization_server
+    schemas: authorization_server
+    locations: classpath:db/migration
   security:
     oauth2:
       authorizationserver:
-        issuer: http://localhost:9000
-
-
-
+        issuer: ${AUTH_ISSUER:http://localhost:9000}
+app:
+  clients:
+    service-secret: ${SERVICE_CLIENT_SECRET}
+    login-secret: ${LOGIN_CLIENT_SECRET}
+    redirect-uri: ${LOGIN_REDIRECT_URI:http://127.0.0.1:8080/callback}
+  signing-key:
+    path: ${SIGNING_KEY_PATH:}
+    password: ${SIGNING_KEY_PASSWORD:}
+    alias: ${SIGNING_KEY_ALIAS:auth-signing}
 server:
   port: 9000

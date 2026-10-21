@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:auth;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS authorization_server\;CREATE DOMAIN IF NOT EXISTS authorization_server.TIMESTAMPTZ AS TIMESTAMP WITH TIME ZONE
+    hikari:
+      schema: authorization_server
+    username: sa
+    password: ""
+  jpa:
+    properties:
+      hibernate:
+        default_schema: authorization_server
+app:
+  clients:
+    service-secret: test-service-secret
+    login-secret: test-login-secret
+  signing-key:
+    path: ""

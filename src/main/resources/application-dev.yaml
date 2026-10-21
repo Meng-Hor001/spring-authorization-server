@@ -1,0 +1,8 @@
+app:
+  signing-key:
+    path: ${SIGNING_KEY_PATH:.local/signing.p12}
+    password: ${SIGNING_KEY_PASSWORD:local-signing-password}
+  demo-user-password: ${DEMO_USER_PASSWORD:ChangeThisLocalPassword}
+  clients:
+    service-secret: ${SERVICE_CLIENT_SECRET:service-secret}
+    login-secret: ${LOGIN_CLIENT_SECRET:login-secret}
