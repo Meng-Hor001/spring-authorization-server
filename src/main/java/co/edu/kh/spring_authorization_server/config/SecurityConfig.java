@@ -21,8 +21,44 @@ import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 @Configuration
 public class SecurityConfig {
     @Bean
+    @Order(2)
+    SecurityFilterChain adminApi(HttpSecurity http) throws Exception {
+        return http
+                .securityMatcher("/api/admin/**")
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().hasRole("ADMIN")
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .httpBasic(Customizer.withDefaults())
+                .build();
+    }
+
+    @Bean
     @Order(3)
-    SecurityFilterChain login(HttpSecurity http) throws Exception{
+    public SecurityFilterChain apiSecurity(HttpSecurity http)
+            throws Exception {
+
+        http
+                .securityMatcher("/api/hello", "/api/public/**")
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers("/api/hello")
+                        .hasAuthority("SCOPE_api.read")
+                        .anyRequest().authenticated())
+                .oauth2ResourceServer(resourceServer ->
+                        resourceServer.jwt(jwt -> {}));
+
+        return http.build();
+    }
+
+    @Bean
+    @Order(4)
+    public SecurityFilterChain login(HttpSecurity http) throws Exception{
         var registration = PathPatternRequestMatcher.withDefaults()
                 .matcher(HttpMethod.POST, "/api/v1/users/register");
 
@@ -40,20 +76,7 @@ public class SecurityConfig {
     }
 
 
-    @Bean
-    @Order(2)
-    SecurityFilterChain adminApi(HttpSecurity http) throws Exception {
-        return http
-                .securityMatcher("/api/admin/**")
-                .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().hasRole("ADMIN")
-                )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .httpBasic(Customizer.withDefaults())
-                .build();
-    }
+
 
     @Bean
     AuthorizationServerSettings authorizationServerSettings(Environment environment){
@@ -61,4 +84,6 @@ public class SecurityConfig {
                 .issuer(environment.getRequiredProperty("spring.security.oauth2.authorizationserver.issuer"))
                 .build();
     }
+
+
 }
